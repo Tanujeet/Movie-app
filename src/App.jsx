@@ -16,6 +16,12 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const fetchMovies = async () => {
     try {
+      const endpoint = `${API_BASE_URL}/discover/movies?sort_by=popularity.desc`;
+      const response = await fetch(endpoint, API_OPTION);
+      if (!response.ok) {
+        throw new Error("failed to fetch movies");
+      }
+      const data = await response.json();
     } catch (error) {
       console.log(error);
       setErrorMessage("Error fetching movies");
@@ -34,9 +40,12 @@ const App = () => {
             Find <span className="text-gradient">movies</span> You'll enjoy
             without the Hassle
           </h1>
+          <Search searchTerm={searchTerm} setsearchTerm={setsearchTerm} />
         </header>
-        <Search searchTerm={searchTerm} setsearchTerm={setsearchTerm} />
-        <h1 className="text-white">{searchTerm}</h1>
+        <section className="all-movies">
+          <h2>All Movies</h2>
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        </section>
       </div>
     </main>
   );
