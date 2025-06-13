@@ -6,36 +6,36 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_OPTION = {
   method: "GET",
   headers: {
-    accept: "applications/json",
+    accept: "application/json",
     authorization: `Bearer ${API_KEY}`,
   },
 };
 
 const App = () => {
-  s;
   const [searchTerm, setsearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [moviesList, setMoviesList] = useState([]);
-  const [IsLoadingt, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchMovies = async () => {
     setIsLoading(true);
     setErrorMessage("");
 
     try {
-      const endpoint = `${API_BASE_URL}/discover/movies?sort_by=popularity.desc`;
+      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       const response = await fetch(endpoint, API_OPTION);
 
       if (!response.ok) {
-        throw new Error("failed to fetch movies");
+        throw new Error("Failed to fetch movies");
       }
-      const data = await response.json();
 
-      if (data.Response === false) {
+      const data = await response.json();
+      if (data.Response === "false") {
         setErrorMessage(data.Error || "Failed to fetch movies");
         setMoviesList([]);
         return;
       }
+
       setMoviesList(data.results || []);
     } catch (error) {
       console.log(error);
@@ -63,7 +63,18 @@ const App = () => {
         </header>
         <section className="all-movies">
           <h2>All Movies</h2>
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : (
+            <ul>
+              {moviesList.map((movie) => (
+                <li key={movie.id}>{movie.title}</li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </main>
