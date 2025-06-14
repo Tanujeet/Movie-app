@@ -1,3 +1,5 @@
+import React from "react";
+
 const Spinner = () => {
   return (
     <div role="status">
@@ -17,9 +19,8 @@ const Spinner = () => {
           fill="currentFill"
         />
       </svg>
-      <span class="sr-only">Loading...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };
-
 export default Spinner;
